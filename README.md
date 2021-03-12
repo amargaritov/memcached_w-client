@@ -19,6 +19,7 @@ To build Memcached and setup the YCSB client run
 To run a Memcached study use 
 ```bash 
 ./run_study.sh <DATASET_SIZE_IN_GB> <NUM_MEMCACHED_THREADS>
+```
 
 This script will 
 
