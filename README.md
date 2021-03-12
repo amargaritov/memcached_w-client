@@ -25,7 +25,7 @@ This script will
 
 - start a Memcached server
 - load a dataset to Memcached (warm up)
-- model client requests (total number of requests and read/write ration can be set in client_conf_default)
+- model client requests (total number of requests and the read/write ratio can be set in client_conf_default file)
 
 Note that number of records (which defines the Memcached dataset size) is set through a parameter of ./run_study.sh, don't change it in client_conf_default).
 Note that NUM_MEMCACHED_THREADS should not be more than 8, I would say the good value is 4.
