@@ -1,0 +1,6 @@
+[submodule "memcached"]
+	path = memcached
+	url = https://github.com/memcached/memcached.git
+[submodule "ycsb"]
+	path = ycsb
+	url = https://github.com/brianfrankcooper/YCSB.git
