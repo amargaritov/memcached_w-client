@@ -3,9 +3,12 @@
 # install the client for memcached
 sudo apt-get update 
 echo "I want to install maven libevent-dev automake, please give me sudo"
-sudo apt-get install maven make gcc g++ -y 
+sudo apt-get install maven make gcc g++ python -y 
 
 pushd ycsb
+cp ../ycsb_patch_4_arm64 ./
+git checkout ce3eb9ce51c84ee9e236998cdd2cefaeb96798a8 
+git apply ycsb_patch_4_arm64
 mvn -pl site.ycsb:memcached-binding -am clean package
 popd 
 
