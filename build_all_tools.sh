@@ -1,8 +1,9 @@
 #!/bin/bash -x
 
 # install the client for memcached
+sudo apt-get update 
 echo "I want to install maven libevent-dev automake, please give me sudo"
-sudo apt-get install maven -y 
+sudo apt-get install maven make gcc g++ -y 
 
 pushd ycsb
 mvn -pl site.ycsb:memcached-binding -am clean package
