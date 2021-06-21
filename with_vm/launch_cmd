@@ -1,0 +1,1 @@
+sudo ./qemu/build/aarch64-softmmu/qemu-system-aarch64 -machine virt -kernel ./linux_kernel/Image -boot c -m 32G -hda $(pwd)/rootfs.img -append "root=/dev/vda rw" -device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::6666-:22 --enable-kvm -smp 20 -cpu host -nographic -mem-prealloc -mem-path /hugepages

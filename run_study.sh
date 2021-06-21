@@ -32,7 +32,7 @@ function ctrl_c() {
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 SERVER_CORES=0-3
-CLIENT_CORES=4-7
+CLIENT_CORES=4-63
 
 CUR_DIR=$(pwd)
 
@@ -81,6 +81,9 @@ START_TIME=$SECONDS
 time ./bin/ycsb run  memcached -s -P $CUR_DIR/client_conf_current -p "memcached.hosts=$(hostname)" > $CUR_DIR/outputRun.txt 2>&1 & client_pid=$!
 taskset -p -c $CLIENT_CORES $client_pid
 popd
+
+# let THP do the job
+sleep 20
 
 wait $client_pid
 CLIENT_TIME=$(($SECONDS - $START_TIME))
