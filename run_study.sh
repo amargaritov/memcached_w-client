@@ -34,6 +34,8 @@ function ctrl_c() {
 SERVER_CORES=0-3
 CLIENT_CORES=4-7
 
+HOSTNAME=ec2-54-244-156-1.us-west-2.compute.amazonaws.com
+
 CUR_DIR=$(pwd)
 
 MEMORY="$1"       #provide memory size in GB
@@ -55,11 +57,11 @@ cp ./client_conf_default ./client_conf_current
 sed -i "s/replacemerecords/$RECORD_COUNT/g" ./client_conf_current
 
 
-# Memcached takes memory size parameter in megabytes 
-# calculate the size in MB + add approx. 5% on top of the dataset size 
-./install_location/bin/memcached -u -t $THREADS -m $(( $MEMORY * 1100 )) -n 1000 > $CUR_DIR/server.log 2>&1 & pid=$!
-taskset -p -c $SERVER_CORES $pid
-echo "Started server $(date)"
+## Memcached takes memory size parameter in megabytes 
+## calculate the size in MB + add approx. 5% on top of the dataset size 
+#./install_location/bin/memcached -u -t $THREADS -m $(( $MEMORY * 1100 )) -n 1000 > $CUR_DIR/server.log 2>&1 & pid=$!
+#taskset -p -c $SERVER_CORES $pid
+#echo "Started server $(date)"
 
 sleep 5
 
@@ -67,8 +69,8 @@ sleep 5
 echo "$(date) Warm up memcached..."
 pushd ycsb
 START_TIME=$SECONDS
-./bin/ycsb load memcached -s -P $CUR_DIR/client_conf_current -p "memcached.hosts=$(hostname)" > $CUR_DIR/outputLoad.txt 2>&1 & warm_pid=$!
-taskset -p -c $CLIENT_CORES $warm_pid
+./bin/ycsb load memcached -s -P $CUR_DIR/client_conf_current -p "memcached.hosts=$HOSTNAME" > $CUR_DIR/outputLoad.txt 2>&1 & warm_pid=$!
+#taskset -p -c $CLIENT_CORES $warm_pid
 popd
 
 wait $warm_pid
@@ -78,8 +80,8 @@ echo $WARM_TIME > warm_time
 echo "$(date) Starting client..."
 pushd ycsb
 START_TIME=$SECONDS
-time ./bin/ycsb run  memcached -s -P $CUR_DIR/client_conf_current -p "memcached.hosts=$(hostname)" > $CUR_DIR/outputRun.txt 2>&1 & client_pid=$!
-taskset -p -c $CLIENT_CORES $client_pid
+time ./bin/ycsb run  memcached -s -P $CUR_DIR/client_conf_current -p "memcached.hosts=$HOSTNAME" > $CUR_DIR/outputRun.txt 2>&1 & client_pid=$!
+#taskset -p -c $CLIENT_CORES $client_pid
 popd
 
 wait $client_pid
