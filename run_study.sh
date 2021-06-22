@@ -57,7 +57,7 @@ sed -i "s/replacemerecords/$RECORD_COUNT/g" ./client_conf_current
 
 # Memcached takes memory size parameter in megabytes 
 # calculate the size in MB + add approx. 5% on top of the dataset size 
-./install_location/bin/memcached -u -t $THREADS -m $(( $MEMORY * 1100 )) -n 1000 > $CUR_DIR/server.log 2>&1 & pid=$!
+./install_location/bin/memcached -u -t $THREADS -m $(( $MEMORY * 1100 * 2)) --disable-evictions --memory-limit=20480 --extended hashpower=20 --extended no_lru_crawler --extended no_lru_maintainer -n 1000 > $CUR_DIR/server.log 2>&1 & pid=$!
 taskset -p -c $SERVER_CORES $pid
 echo "Started server $(date)"
 
