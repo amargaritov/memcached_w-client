@@ -57,8 +57,7 @@ sed -i "s/replacemerecords/$RECORD_COUNT/g" ./client_conf_current
 
 # Memcached takes memory size parameter in megabytes 
 # calculate the size in MB + add approx. 5% on top of the dataset size 
-#./install_location/bin/memcached -u -t $THREADS -m $(( $MEMORY * 1100 * 2)) --disable-evictions --memory-limit=20480 --extended hashpower=20 --extended no_lru_crawler --extended no_lru_maintainer -n 1000 > $CUR_DIR/server.log 2>&1 & pid=$!
-redis-server redis.conf > $CUR_DIR/server.log 2>&1 & pid=$! 
+./install_location/bin/memcached -u -t $THREADS -m $(( $MEMORY * 1100 * 2)) --disable-evictions --memory-limit=20480 --extended hashpower=20 --extended no_lru_crawler --extended no_lru_maintainer -n 1000 > $CUR_DIR/server.log 2>&1 & pid=$!
 taskset -p -c $SERVER_CORES $pid
 echo "Started server $(date)"
 
@@ -68,8 +67,7 @@ sleep 5
 echo "$(date) Warm up memcached..."
 pushd ycsb
 START_TIME=$SECONDS
-./bin/ycsb load redis -s -P $CUR_DIR/client_conf_current -p "redis.hosts=$(hostname)" -p "redis.host=127.0.0.1" -p "redis.port=6379" > $CUR_DIR/outputLoad.txt 2>&1 & warm_pid=$! 
-#load redis -s -P $REPO_ROOT/workloads/ycsb-redis-binding-0.15.0/workloads/$WORKLOAD -p "redis.host=127.0.0.1" -p "redis.port=6379" -threads 8 > outputLoad.txt 2>&1
+./bin/ycsb load memcached -s -P $CUR_DIR/client_conf_current -p "memcached.hosts=$(hostname)" > $CUR_DIR/outputLoad.txt 2>&1 & warm_pid=$!
 taskset -p -c $CLIENT_CORES $warm_pid
 popd
 
@@ -77,10 +75,15 @@ wait $warm_pid
 WARM_TIME=$(($SECONDS - $START_TIME))
 echo $WARM_TIME > warm_time
 
+mkdir -p perf_data/$conf
+pushd $conf
+sudo perf record -F 99 -a -g -p $pid &
+popd
+
 echo "$(date) Starting client..."
 pushd ycsb
 START_TIME=$SECONDS
-time ./bin/ycsb run  redis -s -P $CUR_DIR/client_conf_current -p "redis.hosts=$(hostname)" -p "redis.host=127.0.0.1" -p "redis.port=6379" > $CUR_DIR/outputRun.txt 2>&1 & client_pid=$!
+time ./bin/ycsb run  memcached -s -P $CUR_DIR/client_conf_current -p "memcached.hosts=$(hostname)" > $CUR_DIR/outputRun.txt 2>&1 & client_pid=$!
 taskset -p -c $CLIENT_CORES $client_pid
 popd
 
@@ -93,3 +96,12 @@ echo $CLIENT_TIME > client_time
 
 kill $pid
 echo "Finished $(date)"
+
+sleep 10 
+CUR=$(pwd)
+pushd perf_data/$conf
+perf script | $CUR/FlameGraph/stackcollapse-perf.pl > out.perf-folded
+$CUR/FlameGraph/flamegraph.pl out.perf-folded > perf-kernel.svg
+popd
+
+

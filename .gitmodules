@@ -7,3 +7,6 @@
 [submodule "redis/ycsb"]
 	path = redis/ycsb
 	url = https://github.com/brianfrankcooper/YCSB.git
+[submodule "FlameGraph"]
+	path = FlameGraph
+	url = https://github.com/brendangregg/FlameGraph.git
