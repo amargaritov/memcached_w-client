@@ -76,7 +76,7 @@ WARM_TIME=$(($SECONDS - $START_TIME))
 echo $WARM_TIME > warm_time
 
 mkdir -p perf_data/$conf
-pushd $conf
+pushd perf_data/$conf
 sudo perf record -F 99 -a -g -p $pid &
 popd
 
@@ -100,7 +100,7 @@ echo "Finished $(date)"
 sleep 10 
 CUR=$(pwd)
 pushd perf_data/$conf
-perf script | $CUR/FlameGraph/stackcollapse-perf.pl > out.perf-folded
+sudo perf script | $CUR/FlameGraph/stackcollapse-perf.pl > out.perf-folded
 $CUR/FlameGraph/flamegraph.pl out.perf-folded > perf-kernel.svg
 popd
 

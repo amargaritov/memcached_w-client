@@ -23,7 +23,7 @@
 #   Request distribution: zipfian
 
 #recordcount=81920000
-recordcount=replacemerecords
+recordcount=8388608
 operationcount=3000000
 workload=site.ycsb.workloads.CoreWorkload
 
