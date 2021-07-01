@@ -25,5 +25,5 @@ cd $SOURCE
 ./configure --prefix=$INSTALL_D
 make -j
 make install
-sudo apt-get install linux-tools-common linux-tools-generic linux-tools-`uname -r`
+sudo apt-get install linux-tools-common linux-tools-generic linux-tools-`uname -r` -y
 

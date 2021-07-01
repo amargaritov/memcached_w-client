@@ -30,5 +30,5 @@ sudo apt-get install redis -y
 #
 #sudo update-alternatives --config java
 #
-sudo apt-get install linux-tools-common linux-tools-generic linux-tools-`uname -r`
+sudo apt-get install linux-tools-common linux-tools-generic linux-tools-`uname -r` -y
 
