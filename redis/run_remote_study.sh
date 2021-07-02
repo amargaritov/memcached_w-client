@@ -63,13 +63,13 @@ sed -i "s/replacemerecords/$RECORD_COUNT/g" ./client_conf_current
 #echo "Started server $(date)"
 
 ssh -i "mg6.metal-test1.pem" ubuntu@$HOSTNAME '//disk/memcached_w-client/redis/start_server.sh' & 
-sleep 5
+sleep 30
 
 #warmup
 echo "$(date) Warm up memcached..."
 pushd ycsb
 START_TIME=$SECONDS
-./bin/ycsb load redis -s -P $CUR_DIR/client_conf_current -p "redis.hosts=$(hostname)" -p "redis.host=$HOSTNAME" -p "redis.port=6379" > $CUR_DIR/outputLoad.txt 2>&1 & warm_pid=$! 
+./bin/ycsb load redis -s -P $CUR_DIR/client_conf_current -p "redis.host=$HOSTNAME" -p "redis.port=6379" > $CUR_DIR/outputLoad.txt 2>&1 & warm_pid=$! 
 #load redis -s -P $REPO_ROOT/workloads/ycsb-redis-binding-0.15.0/workloads/$WORKLOAD -p "redis.host=127.0.0.1" -p "redis.port=6379" -threads 8 > outputLoad.txt 2>&1
 taskset -p -c $CLIENT_CORES $warm_pid
 popd
@@ -84,7 +84,7 @@ sleep 20
 echo "$(date) Starting client..."
 pushd ycsb
 START_TIME=$SECONDS
-time ./bin/ycsb run  redis -s -P $CUR_DIR/client_conf_current -p "redis.hosts=$(hostname)" -p "redis.host=127.0.0.1" -p "redis.port=6379" > $CUR_DIR/outputRun.txt 2>&1 & client_pid=$!
+time ./bin/ycsb run  redis -s -P $CUR_DIR/client_conf_current -p "redis.host=$HOSTNAME" -p "redis.port=6379" > $CUR_DIR/outputRun.txt 2>&1 & client_pid=$!
 taskset -p -c $CLIENT_CORES $client_pid
 popd
 
