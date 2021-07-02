@@ -32,3 +32,6 @@ sudo apt-get install redis -y
 #
 sudo apt-get install linux-tools-common linux-tools-generic linux-tools-`uname -r` -y
 
+
+sleep 60
+ps aux | grep redis- | awk '{print $2}' | sudo kill -9 
