@@ -62,7 +62,7 @@ sed -i "s/replacemerecords/$RECORD_COUNT/g" ./client_conf_current
 #taskset -p -c $SERVER_CORES $pid
 #echo "Started server $(date)"
 
-ssh -i "mg6.metal-test1.pem" ubuntu@$HOSTANME //disk/memcached_w-client/redis/start_server.sh & 
+ssh -i "mg6.metal-test1.pem" ubuntu@$HOSTNAME '//disk/memcached_w-client/redis/start_server.sh' & 
 sleep 5
 
 #warmup
@@ -93,6 +93,6 @@ CLIENT_TIME=$(($SECONDS - $START_TIME))
 echo $CLIENT_TIME > client_time
 
 #kill $pid
-ssh -i "mg6.metal-test1.pem" ubuntu@$HOSTANME //disk/memcached_w-client/redis/kill_server.sh 
+ssh -i "mg6.metal-test1.pem" ubuntu@$HOSTNAME '//disk/memcached_w-client/redis/kill_server.sh'
 
 echo "Finished $(date)"
