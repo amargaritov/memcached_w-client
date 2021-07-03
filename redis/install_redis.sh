@@ -37,6 +37,6 @@ sudo service redis stop
 sleep 60
 ps aux | grep redis- | awk '{print $2}' | sudo kill -9 
 
-sudo apt-get install python3-pip 
+sudo apt-get install python3-pip -y
 sudo pip install psrecord 
 

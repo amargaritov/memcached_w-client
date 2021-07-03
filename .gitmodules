@@ -10,3 +10,9 @@
 [submodule "FlameGraph"]
 	path = FlameGraph
 	url = https://github.com/brendangregg/FlameGraph.git
+[submodule "redis/from_sources/jemalloc"]
+	path = redis/from_sources/jemalloc
+	url = https://github.com/jemalloc/jemalloc.git
+[submodule "redis/from_sources/redis"]
+	path = redis/from_sources/redis
+	url = https://github.com/redis/redis.git
