@@ -16,3 +16,6 @@
 [submodule "redis/from_sources/redis"]
 	path = redis/from_sources/redis
 	url = https://github.com/redis/redis.git
+[submodule "libevent"]
+	path = libevent
+	url = https://github.com/libevent/libevent
