@@ -1,1 +1,3 @@
-   find -name "outputR*" |sort; cat $(find -name "outputR*" |sort) | grep RunT
+#   find -name "outputR*" |sort; cat $(find -name "outputR*" |sort) | grep RunT
+
+find -name "outputR*" |sort | grep "/THP"; cat $(find -name "outputR*" |sort | grep "/THP") | grep RunT ; find -name "outputR*" |sort | grep "noTHP"; cat $(find -name "outputR*" |sort | grep "noTHP") | grep RunT 
